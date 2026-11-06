@@ -365,10 +365,10 @@ export class TabNotesStorage {
   }
 
   /**
-   * Search saved tab notes by their text.
+   * Search saved tab notes by their text or canonical URL.
    *
    * @param {string} query
-   *   Text to find in saved notes.
+   *   Text to find in saved notes or page addresses.
    * @param {object} [options]
    * @param {number} [options.limit=100]
    *   Maximum number of records to return.
