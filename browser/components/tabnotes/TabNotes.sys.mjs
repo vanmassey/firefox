@@ -74,7 +74,9 @@ SELECT
   created,
   note_text
 FROM tabnotes
-WHERE instr(lower(note_text), lower(:query)) > 0
+WHERE
+  instr(lower(note_text), lower(:query)) > 0
+  OR instr(lower(canonical_url), lower(:query)) > 0
 ORDER BY created DESC, id DESC
 LIMIT :limit
 `;
