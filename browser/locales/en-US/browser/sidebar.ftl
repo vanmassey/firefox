@@ -369,6 +369,7 @@ sidebar-tabmemory-title = Tab Memory
 sidebar-tabmemory-search =
   .placeholder = Search saved notes
 sidebar-tabmemory-empty = No saved tab notes yet.
+sidebar-tabmemory-no-results = No saved notes match your search.
 sidebar-tabmemory-private = Tab Memory is unavailable in private windows.
 sidebar-tabmemory-edit = Edit
 sidebar-tabmemory-delete = Delete
