@@ -358,3 +358,18 @@ sidebar-widget-hide-sidebar2 =
 sidebar-pins-promo-text = Drag important tabs here to keep them within reach
 sidebar-pins-promo-text-2 =
   .heading = Drag important tabs here to keep them within reach
+
+
+# Tab Memory sidebar
+menu-view-tab-memory =
+  .label = Tab Memory
+sidebar-menu-tab-memory-label =
+  .label = Tab Memory
+sidebar-tabmemory-title = Tab Memory
+sidebar-tabmemory-search =
+  .placeholder = Search saved notes
+sidebar-tabmemory-empty = No saved tab notes yet.
+sidebar-tabmemory-private = Tab Memory is unavailable in private windows.
+sidebar-tabmemory-edit = Edit
+sidebar-tabmemory-delete = Delete
+sidebar-tabmemory-open = Open
