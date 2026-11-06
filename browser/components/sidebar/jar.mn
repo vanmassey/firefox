@@ -32,6 +32,9 @@ browser.jar:
     content/browser/sidebar/sidebar-pins-promo.mjs
     content/browser/sidebar/sidebar-syncedtabs.html
     content/browser/sidebar/sidebar-syncedtabs.mjs
+    content/browser/sidebar/sidebar-tabmemory.html
+    content/browser/sidebar/sidebar-tabmemory.mjs
+    content/browser/sidebar/sidebar-tabmemory.css
     content/browser/sidebar/sidebar-tab-list.css
     content/browser/sidebar/sidebar-tab-list.mjs
     content/browser/sidebar/sidebar-tab-row.css
