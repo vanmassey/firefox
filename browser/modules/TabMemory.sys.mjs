@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { PrivateBrowsingUtils } from "resource://gre/modules/PrivateBrowsingUtils.sys.mjs";
-import { SessionStore } from "moz-src:///browser/components/sessionstore/SessionStore.sys.mjs";
+import { SessionStore } from "resource:///modules/sessionstore/SessionStore.sys.mjs";
 
 const MEMORY_KEY = "firefox-tab-memory";
 const MEMORY_VERSION = 1;
@@ -22,7 +22,9 @@ const MAX_NOTE_LENGTH = 4096;
  */
 export function createTabMemory({ sessionStore, privateBrowsingUtils }) {
   if (!sessionStore || !privateBrowsingUtils) {
-    throw new TypeError("Tab Memory requires SessionStore and PrivateBrowsingUtils");
+    throw new TypeError(
+      "Tab Memory requires SessionStore and PrivateBrowsingUtils"
+    );
   }
 
   function isUsableTab(tab) {
