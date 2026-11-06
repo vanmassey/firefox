@@ -439,6 +439,16 @@ tab-group-context-open-saved-group-in-this-window =
 tab-group-context-open-saved-group-in-new-window =
     .label = Open Group in New Window
 
+## Tab Memory
+
+tab-context-search-memory =
+    .label = Find Tabs by Note…
+    .accesskey = F
+
+tab-memory-search-title = Find Tabs by Note
+tab-memory-search-prompt = Search the notes saved across your open tabs:
+tab-memory-search-no-results = No open tabs have a note matching that search.
+
 ## Tab Notes
 
 tab-context-add-note =
