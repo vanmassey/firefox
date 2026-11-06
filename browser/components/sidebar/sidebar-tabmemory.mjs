@@ -49,10 +49,7 @@ async function refresh() {
     actions.className = "tabmemory-actions";
     actions.append(
       makeButton(await strings.formatValue("sidebar-tabmemory-open"), () => {
-        const tab = chromeWindow.gBrowser.addTab(record.canonicalUrl, {
-          triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
-        });
-        chromeWindow.gBrowser.selectedTab = tab;
+        chromeWindow.openTrustedLinkIn(record.canonicalUrl, "tab");
       }),
       makeButton(await strings.formatValue("sidebar-tabmemory-edit"), async () => {
         const updated = chromeWindow.prompt("Edit tab memory", record.text);
