@@ -157,6 +157,43 @@ add_task(async function tabNotesCount() {
   Assert.equal(await TabNotes.count(), 0, "should be zero tab notes again");
 });
 
+add_task(async function tabNotesSearch() {
+  const researchTab = new FakeTab("https://example.com/research");
+  const weatherTab = new FakeTab("https://example.com/weather");
+  const privateTab = new FakeTab("https://example.com/private");
+
+  await TabNotes.set(researchTab, "Review browser engine architecture");
+  await TabNotes.set(weatherTab, "Check tomorrow's forecast");
+  await TabNotes.set(privateTab, "Private research notes");
+
+  const matches = await TabNotes.search("ENGINE");
+  Assert.equal(matches.length, 1, "search is case-insensitive");
+  Assert.equal(
+    matches[0].canonicalUrl,
+    researchTab.canonicalUrl,
+    "search returns the matching note"
+  );
+
+  Assert.deepEqual(
+    await TabNotes.search("   "),
+    [],
+    "an empty query returns no results"
+  );
+  Assert.equal(
+    (await TabNotes.search("research", { limit: 1 })).length,
+    1,
+    "search respects its result limit"
+  );
+
+  await Assert.rejects(
+    TabNotes.search(42),
+    /TypeError/,
+    "search rejects non-string queries"
+  );
+
+  await TabNotes.reset();
+});
+
 add_task(async function tabNotesSanitizationTests() {
   let tab = new FakeTab("https://example.com/");
   let tooLongValue = "x".repeat(1500);
