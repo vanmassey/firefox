@@ -79,6 +79,17 @@ ORDER BY created DESC, id DESC
 LIMIT :limit
 `;
 
+const LIST_NOTES = `
+SELECT
+  id,
+  canonical_url,
+  created,
+  note_text
+FROM tabnotes
+ORDER BY created DESC, id DESC
+LIMIT :limit
+`;
+
 const GET_NOTE_COUNT = `
 SELECT COUNT(*) FROM tabnotes
 `;
@@ -376,6 +387,23 @@ export class TabNotesStorage {
       limit,
     });
 
+    return results.map(row => this.#mapDbRowToRecord(row));
+  }
+
+  /**
+   * Retrieve saved notes, newest first.
+   *
+   * @param {object} [options]
+   * @param {number} [options.limit=500]
+   *   Maximum number of records to return.
+   * @returns {Promise<TabNoteRecord[]>}
+   */
+  async list(options = {}) {
+    const limit = Number.isInteger(options.limit)
+      ? Math.min(Math.max(options.limit, 1), 1000)
+      : 500;
+    const connection = await this.#connection;
+    const results = await connection.executeCached(LIST_NOTES, { limit });
     return results.map(row => this.#mapDbRowToRecord(row));
   }
 
