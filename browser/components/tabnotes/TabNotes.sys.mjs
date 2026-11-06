@@ -324,6 +324,10 @@ export class TabNotesStorage {
    *   True if there was a note and it was deleted; false otherwise
    */
   async delete(tab, options = {}) {
+    if (!this.isEligible(tab)) {
+      return false;
+    }
+
     const connection = await this.#connection;
     /** @type {mozIStorageRow[]} */
     const deleteResult = await connection.executeCached(DELETE_NOTE, {
