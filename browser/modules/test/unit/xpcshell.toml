@@ -56,6 +56,8 @@ run-if = [
 
 ["test_SiteDataManager.js"]
 
+["test_TabMemory.js"]
+
 ["test_SiteDataManagerContainers.js"]
 
 ["test_SitePermissions.js"]
