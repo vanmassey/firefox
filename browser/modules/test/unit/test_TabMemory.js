@@ -101,12 +101,11 @@ add_task(function test_search_matches_note_title_and_url() {
 });
 
 add_task(function test_corrupt_and_unknown_versions_are_ignored() {
-  const { memory, createTab } = createTestEnvironment();
+  const { memory, createTab, sessionStore } = createTestEnvironment();
   const tab = createTab();
   const key = "firefox-tab-memory";
 
   // Simulate data restored from a damaged or newer session file.
-  const { sessionStore } = createTestEnvironment();
   sessionStore.setCustomTabValue(tab, key, "{not valid JSON");
   Assert.isNull(memory.get(tab), "Malformed JSON is safely ignored");
 
