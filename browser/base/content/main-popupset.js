@@ -15,6 +15,7 @@ document.addEventListener(
         "moz-src:///browser/components/miniwindow/MiniWindowManager.sys.mjs",
       TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
       TabNotes: "moz-src:///browser/components/tabnotes/TabNotes.sys.mjs",
+      TabMemory: "resource:///modules/TabMemory.sys.mjs",
     });
     let mainPopupSet = document.getElementById("mainPopupSet");
     // The trigger node may be a descendant of the tab group row carrying
@@ -153,6 +154,38 @@ document.addEventListener(
             false
           );
           break;
+        case "context_searchTabMemory": {
+          const search = { value: "" };
+          const title = gBrowser.tabLocalization.formatValueSync(
+            "tab-memory-search-title"
+          );
+          const prompt = gBrowser.tabLocalization.formatValueSync(
+            "tab-memory-search-prompt"
+          );
+          if (!Services.prompt.prompt(window, title, prompt, search, null, {})) {
+            break;
+          }
+
+          lazy.TabMemory.search(gBrowser.tabs, search.value).then(results => {
+            if (!results.length) {
+              Services.prompt.alert(
+                window,
+                title,
+                gBrowser.tabLocalization.formatValueSync(
+                  "tab-memory-search-no-results"
+                )
+              );
+              return;
+            }
+
+            const [match] = results;
+            gBrowser.selectedTab = match.tab;
+            gBrowser.tabNoteMenu.openPanel(match.tab, {
+              telemetrySource: lazy.TabNotes.TELEMETRY_SOURCE.TAB_CONTEXT_MENU,
+            });
+          }).catch(Cu.reportError);
+          break;
+        }
         case "context_moveToStart":
           gBrowser.moveTabsToStart(TabContextMenu.contextTab, {
             metricsContext: lazy.TabMetrics.userTriggeredContext(
