@@ -62,7 +62,15 @@ async function refresh() {
     return;
   }
 
-  setStatus(records.length ? "" : await localized("sidebar-tabmemory-empty"));
+  setStatus(
+    records.length
+      ? ""
+      : await localized(
+          query
+            ? "sidebar-tabmemory-no-results"
+            : "sidebar-tabmemory-empty"
+        )
+  );
   const labels = {
     open: await localized("sidebar-tabmemory-open"),
     edit: await localized("sidebar-tabmemory-edit"),
@@ -79,6 +87,14 @@ async function refresh() {
 
     const preview = document.createElement("p");
     preview.textContent = record.text;
+
+    const date = document.createElement("time");
+    date.className = "tabmemory-date";
+    date.dateTime = record.created.toString();
+    date.textContent = new Intl.DateTimeFormat(undefined, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(new Date(record.created.epochMilliseconds));
 
     const actions = document.createElement("div");
     actions.className = "tabmemory-actions";
@@ -120,7 +136,7 @@ async function refresh() {
       })
     );
 
-    item.append(address, preview, actions);
+    item.append(address, date, preview, actions);
     notes.append(item);
   }
 }
