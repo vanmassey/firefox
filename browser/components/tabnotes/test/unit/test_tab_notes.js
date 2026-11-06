@@ -160,11 +160,11 @@ add_task(async function tabNotesCount() {
 add_task(async function tabNotesSearch() {
   const researchTab = new FakeTab("https://example.com/research");
   const weatherTab = new FakeTab("https://example.com/weather");
-  const privateTab = new FakeTab("https://example.com/private");
+  const anotherResearchTab = new FakeTab("https://example.com/another-research");
 
   await TabNotes.set(researchTab, "Review browser engine architecture");
   await TabNotes.set(weatherTab, "Check tomorrow's forecast");
-  await TabNotes.set(privateTab, "Private research notes");
+  await TabNotes.set(anotherResearchTab, "Private research notes");
 
   const matches = await TabNotes.search("ENGINE");
   Assert.equal(matches.length, 1, "search is case-insensitive");
