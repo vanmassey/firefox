@@ -143,3 +143,22 @@ add_task(async function test_search_ignores_private_tabs() {
   Assert.equal(results.length, 1);
   Assert.equal(results[0].tab, regularTab);
 });
+
+add_task(async function test_search_returns_all_duplicate_open_tabs() {
+  const { memory, createTab } = createTestEnvironment();
+  const firstTab = createTab({ url: "https://example.com/shared" });
+  const secondTab = createTab({ url: "https://example.com/shared" });
+
+  await memory.save(firstTab, "keep this page for later");
+  const results = await memory.search([firstTab, secondTab], "later");
+
+  Assert.equal(results.length, 2, "Every open copy of a noted URL is returned");
+  Assert.ok(
+    results.some(result => result.tab === firstTab),
+    "The first matching tab is included"
+  );
+  Assert.ok(
+    results.some(result => result.tab === secondTab),
+    "The second matching tab is included"
+  );
+});
