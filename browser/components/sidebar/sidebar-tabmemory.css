@@ -1,0 +1,14 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+body { margin: 0; }
+main { display: flex; flex-direction: column; gap: var(--space-small); padding: var(--space-medium); }
+#search { box-sizing: border-box; width: 100%; }
+#notes { display: flex; flex-direction: column; gap: var(--space-medium); list-style: none; margin: 0; padding: 0; }
+.tabmemory-note { border: 1px solid var(--border-color); border-radius: var(--border-radius-medium); padding: var(--space-medium); overflow-wrap: anywhere; }
+.tabmemory-url { color: var(--text-color-deemphasized); font-size: var(--font-size-small); }
+.tabmemory-note p { white-space: pre-wrap; }
+.tabmemory-actions { display: flex; flex-wrap: wrap; gap: var(--space-small); }
+.tabmemory-actions button { flex: 1; }
+#status { color: var(--text-color-deemphasized); }
