@@ -105,18 +105,22 @@ export function createTabMemory({ tabNotes, privateBrowsingUtils }) {
       }
 
       const records = await tabNotes.search(term);
-      const tabsByURL = new Map(
-        Array.from(tabs)
-          .filter(tab => tab?.ownerGlobal && !isPrivate(tab))
-          .map(tab => [tab.canonicalUrl, tab])
-      );
+      const tabsByURL = new Map();
+      for (const tab of tabs) {
+        if (!tab?.ownerGlobal || isPrivate(tab)) {
+          continue;
+        }
+        const matchingTabs = tabsByURL.get(tab.canonicalUrl) ?? [];
+        matchingTabs.push(tab);
+        tabsByURL.set(tab.canonicalUrl, matchingTabs);
+      }
 
-      return records
-        .map(memory => ({
-          tab: tabsByURL.get(memory.canonicalUrl),
+      return records.flatMap(memory =>
+        (tabsByURL.get(memory.canonicalUrl) ?? []).map(tab => ({
+          tab,
           memory,
         }))
-        .filter(result => result.tab);
+      );
     },
   });
 }
