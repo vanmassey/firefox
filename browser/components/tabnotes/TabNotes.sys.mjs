@@ -67,6 +67,18 @@ RETURNING
   id, canonical_url, created, note_text
 `;
 
+const SEARCH_NOTES = `
+SELECT
+  id,
+  canonical_url,
+  created,
+  note_text
+FROM tabnotes
+WHERE instr(lower(note_text), lower(:query)) > 0
+ORDER BY created DESC, id DESC
+LIMIT :limit
+`;
+
 const GET_NOTE_COUNT = `
 SELECT COUNT(*) FROM tabnotes
 `;
@@ -333,6 +345,38 @@ export class TabNotesStorage {
   async has(tab) {
     const record = await this.get(tab);
     return record !== undefined;
+  }
+
+  /**
+   * Search saved tab notes by their text.
+   *
+   * @param {string} query
+   *   Text to find in saved notes.
+   * @param {object} [options]
+   * @param {number} [options.limit=100]
+   *   Maximum number of records to return.
+   * @returns {Promise<TabNoteRecord[]>}
+   */
+  async search(query, options = {}) {
+    if (typeof query !== "string") {
+      throw new TypeError("Tab note search query must be a string");
+    }
+
+    const normalizedQuery = query.trim();
+    if (!normalizedQuery) {
+      return [];
+    }
+
+    const limit = Number.isInteger(options.limit)
+      ? Math.min(Math.max(options.limit, 1), 500)
+      : 100;
+    const connection = await this.#connection;
+    const results = await connection.executeCached(SEARCH_NOTES, {
+      query: normalizedQuery,
+      limit,
+    });
+
+    return results.map(row => this.#mapDbRowToRecord(row));
   }
 
   /**
