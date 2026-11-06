@@ -174,6 +174,14 @@ add_task(async function tabNotesSearch() {
     "search returns the matching note"
   );
 
+  const urlMatches = await TabNotes.search("another-research");
+  Assert.equal(urlMatches.length, 1, "search also matches page addresses");
+  Assert.equal(
+    urlMatches[0].canonicalUrl,
+    anotherResearchTab.canonicalUrl,
+    "URL search returns the note saved for that page"
+  );
+
   Assert.deepEqual(
     await TabNotes.search("   "),
     [],
