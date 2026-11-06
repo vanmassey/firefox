@@ -15,9 +15,15 @@
   </head>
   <body>
     <main>
-      <input id="search" type="search" data-l10n-id="sidebar-tabmemory-search" />
-      <p id="status" role="status" hidden></p>
-      <ul id="notes" aria-live="polite"></ul>
+      <h1 data-l10n-id="sidebar-tabmemory-title"></h1>
+      <input
+        id="search"
+        type="search"
+        data-l10n-id="sidebar-tabmemory-search"
+        aria-describedby="status"
+      />
+      <p id="status" role="status" aria-live="polite" hidden></p>
+      <ul id="notes" aria-label="Saved tab notes"></ul>
     </main>
   </body>
 </html>
