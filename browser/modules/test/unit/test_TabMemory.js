@@ -32,6 +32,7 @@ function createTestEnvironment() {
     },
   };
   return {
+    sessionStore,
     memory: createTabMemory({ sessionStore, privateBrowsingUtils }),
     createTab({ isPrivate = false, label = "", url = "" } = {}) {
       return {
@@ -104,9 +105,15 @@ add_task(function test_corrupt_and_unknown_versions_are_ignored() {
   const tab = createTab();
   const key = "firefox-tab-memory";
 
-  // Use the public store interface to simulate data from a damaged or
-  // incompatible session file.
+  // Simulate data restored from a damaged or newer session file.
   const { sessionStore } = createTestEnvironment();
-  void sessionStore;
-  Assert.isNull(memory.get(tab), "Missing data is safely ignored");
+  sessionStore.setCustomTabValue(tab, key, "{not valid JSON");
+  Assert.isNull(memory.get(tab), "Malformed JSON is safely ignored");
+
+  sessionStore.setCustomTabValue(
+    tab,
+    key,
+    JSON.stringify({ version: 99, note: "future note", updatedAt: Date.now() })
+  );
+  Assert.isNull(memory.get(tab), "Unknown schema versions are safely ignored");
 });
