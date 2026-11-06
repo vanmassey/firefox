@@ -94,10 +94,13 @@ add_task(async function tabNotesBasicStorageTests() {
   );
 
   const tabWithoutCanonicalUrl = new FakeTab(undefined);
-  let wasDeleted = await TabNotes.delete(tabWithoutCanonicalUrl);
   Assert.ok(
-    !wasDeleted,
-    "TabNotes.delete should return false if nothing was deleted"
+    !(await TabNotes.delete(tabWithoutCanonicalUrl)),
+    "TabNotes.delete rejects tabs without a canonical URL"
+  );
+  Assert.ok(
+    !(await TabNotes.delete(new FakeTab("not a valid URL"))),
+    "TabNotes.delete rejects tabs with an invalid canonical URL"
   );
 
   let tabNoteRemoved = BrowserTestUtils.waitForEvent(tab, "TabNote:Removed");
