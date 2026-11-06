@@ -107,7 +107,7 @@ export function createTabMemory({ tabNotes, privateBrowsingUtils }) {
       const records = await tabNotes.search(term);
       const tabsByURL = new Map();
       for (const tab of tabs) {
-        if (!tab?.ownerGlobal || isPrivate(tab)) {
+        if (!isUsableTab(tab) || isPrivate(tab)) {
           continue;
         }
         const matchingTabs = tabsByURL.get(tab.canonicalUrl) ?? [];
