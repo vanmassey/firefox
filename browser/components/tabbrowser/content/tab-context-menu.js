@@ -782,7 +782,11 @@ var TabContextMenu = {
 
     let contextAddNote = document.getElementById("context_addNote");
     let contextEditNote = document.getElementById("context_editNote");
+    let contextSearchTabMemory = document.getElementById(
+      "context_searchTabMemory"
+    );
     if (this._tabNotesEnabled) {
+      contextSearchTabMemory.hidden = false;
       // Tab notes behaviour is disabled if a user has a selection of tabs that
       // contains more than one canonical URL.
       let multiselectingDiverseUrls =
@@ -809,6 +813,7 @@ var TabContextMenu = {
     } else {
       contextAddNote.hidden = true;
       contextEditNote.hidden = true;
+      contextSearchTabMemory.hidden = true;
     }
 
     // Split View
