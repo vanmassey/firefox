@@ -447,6 +447,7 @@ tab-context-search-memory =
 
 tab-memory-search-title = Find Tabs by Note
 tab-memory-search-prompt = Search the notes saved across your open tabs:
+tab-memory-search-select-prompt = Select a tab with a matching note:
 tab-memory-search-no-results = No open tabs have a note matching that search.
 
 ## Tab Notes
