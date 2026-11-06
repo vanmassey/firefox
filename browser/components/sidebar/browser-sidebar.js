@@ -18,6 +18,7 @@ const toolsNameMap = {
   viewGenaiChatSidebar: "aichat",
   viewGenaiPageAssistSidebar: "aipageassist",
   viewHistorySidebar: "history",
+  viewTabMemorySidebar: "tabmemory",
   viewTabsSidebar: "syncedtabs",
   viewCPMSidebar: "passwords",
   viewResourceMonitorSidebar: "resourcemonitor",
@@ -145,6 +146,18 @@ var SidebarController = {
           gleanEvent: Glean.history.sidebarToggle,
           gleanClickEvent: Glean.sidebar.historyIconClick,
           recordSidebarVersion: true,
+        }),
+      ],
+      [
+        "viewTabMemorySidebar",
+        this.makeSidebar({
+          name: "tabmemory",
+          elementId: "sidebar-switcher-tabmemory",
+          url: "chrome://browser/content/sidebar/sidebar-tabmemory.html",
+          menuId: "menu_tabMemorySidebar",
+          menuL10nId: "menu-view-tab-memory",
+          revampL10nId: "sidebar-menu-tab-memory-label",
+          iconUrl: "chrome://browser/skin/history.svg",
         }),
       ],
       [
