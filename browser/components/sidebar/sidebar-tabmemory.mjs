@@ -148,7 +148,7 @@ search.addEventListener("input", () => {
   });
 });
 
-refresh().catch(error => {
+refresh().catch(async error => {
   console.error("Unable to load Tab Memory", error);
-  setStatus(error.message || "Tab Memory could not be loaded.");
+  setStatus(await localized("sidebar-tabmemory-error"));
 });
