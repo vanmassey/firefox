@@ -101,7 +101,10 @@ add_task(async function test_input_validation() {
     /limited to 1000 characters/
   );
   await Assert.rejects(memory.save(tab, "  "), /cannot be empty/);
-  Assert.throws(() => memory.search([], 42), /Search query must be a string/);
+  await Assert.rejects(
+    memory.search([], 42),
+    /Search query must be a string/
+  );
   Assert.deepEqual(
     await memory.search([], "  "),
     [],
