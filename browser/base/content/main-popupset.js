@@ -386,6 +386,9 @@ document.addEventListener(
         case "sidebar-switcher-history":
           SidebarController.show("viewHistorySidebar");
           break;
+        case "sidebar-switcher-tabmemory":
+          SidebarController.show("viewTabMemorySidebar");
+          break;
         case "sidebar-switcher-tabs":
           SidebarController.show("viewTabsSidebar");
           break;
