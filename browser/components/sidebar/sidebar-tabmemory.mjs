@@ -144,7 +144,7 @@ async function refresh() {
 search.addEventListener("input", () => {
   refresh().catch(error => {
     console.error("Unable to search Tab Memory", error);
-    setStatus(error.message || "Tab Memory could not be loaded.");
+    setStatus(await localized("sidebar-tabmemory-error"));
   });
 });
 
