@@ -77,6 +77,9 @@ with Files("SelectionChangedMenulist.sys.mjs"):
 with Files("SiteDataManager.sys.mjs"):
     BUG_COMPONENT = ("Firefox", "Settings UI")
 
+with Files("TabMemory.sys.mjs"):
+    BUG_COMPONENT = ("Firefox", "Tabbed Browser")
+
 with Files("SitePermissions.sys.mjs"):
     BUG_COMPONENT = ("Firefox", "Site Permissions")
 
@@ -142,6 +145,7 @@ EXTRA_JS_MODULES += [
     "Sanitizer.sys.mjs",
     "SelectionChangedMenulist.sys.mjs",
     "SiteDataManager.sys.mjs",
+    "TabMemory.sys.mjs",
     "SitePermissions.sys.mjs",
     "TransientPrefs.sys.mjs",
     "UpdatePolicyEnforcer.sys.mjs",
