@@ -194,6 +194,34 @@ add_task(async function tabNotesSearch() {
   await TabNotes.reset();
 });
 
+add_task(async function tabNotesList() {
+  const firstTab = new FakeTab("https://example.com/first");
+  const secondTab = new FakeTab("https://example.com/second");
+
+  await TabNotes.set(firstTab, "First saved note");
+  await TabNotes.set(secondTab, "Second saved note");
+
+  const notes = await TabNotes.list();
+  Assert.equal(notes.length, 2, "list returns every saved note");
+  Assert.equal(
+    notes[0].canonicalUrl,
+    secondTab.canonicalUrl,
+    "list returns the newest note first"
+  );
+  Assert.equal(
+    (await TabNotes.list({ limit: 1 })).length,
+    1,
+    "list respects its result limit"
+  );
+  Assert.equal(
+    (await TabNotes.list({ limit: 5000 })).length,
+    2,
+    "list safely caps excessive limits without losing existing records"
+  );
+
+  await TabNotes.reset();
+});
+
 add_task(async function tabNotesSanitizationTests() {
   let tab = new FakeTab("https://example.com/");
   let tooLongValue = "x".repeat(1500);
