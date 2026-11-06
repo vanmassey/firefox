@@ -76,6 +76,9 @@ async function refresh() {
     edit: await localized("sidebar-tabmemory-edit"),
     delete: await localized("sidebar-tabmemory-delete"),
   };
+  if (generation !== refreshGeneration) {
+    return;
+  }
 
   for (const record of records) {
     const item = document.createElement("li");
