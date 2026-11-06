@@ -162,28 +162,35 @@ document.addEventListener(
           const prompt = gBrowser.tabLocalization.formatValueSync(
             "tab-memory-search-prompt"
           );
-          if (!Services.prompt.prompt(window, title, prompt, search, null, { value: false })) {
+          if (
+            !Services.prompt.prompt(window, title, prompt, search, null, {
+              value: false,
+            })
+          ) {
             break;
           }
 
-          lazy.TabMemory.search(gBrowser.tabs, search.value).then(results => {
-            if (!results.length) {
-              Services.prompt.alert(
-                window,
-                title,
-                gBrowser.tabLocalization.formatValueSync(
-                  "tab-memory-search-no-results"
-                )
-              );
-              return;
-            }
+          lazy.TabMemory.search(gBrowser.tabs, search.value)
+            .then(results => {
+              if (!results.length) {
+                Services.prompt.alert(
+                  window,
+                  title,
+                  gBrowser.tabLocalization.formatValueSync(
+                    "tab-memory-search-no-results"
+                  )
+                );
+                return;
+              }
 
-            const [match] = results;
-            gBrowser.selectedTab = match.tab;
-            gBrowser.tabNoteMenu.openPanel(match.tab, {
-              telemetrySource: lazy.TabNotes.TELEMETRY_SOURCE.TAB_CONTEXT_MENU,
-            });
-          }).catch(Cu.reportError);
+              const [match] = results;
+              gBrowser.selectedTab = match.tab;
+              gBrowser.tabNoteMenu.openPanel(match.tab, {
+                telemetrySource:
+                  lazy.TabNotes.TELEMETRY_SOURCE.TAB_CONTEXT_MENU,
+              });
+            })
+            .catch(Cu.reportError);
           break;
         }
         case "context_moveToStart":
