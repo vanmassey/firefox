@@ -49,109 +49,109 @@ async function refresh() {
   const generation = ++refreshGeneration;
   notes.replaceChildren();
 
-  if (PrivateBrowsingUtils.isWindowPrivate(chromeWindow)) {
-    setStatus(await localized("sidebar-tabmemory-private"));
-    search.disabled = true;
-    return;
-  }
-  search.disabled = false;
+  try {
+    if (PrivateBrowsingUtils.isWindowPrivate(chromeWindow)) {
+      search.disabled = true;
+      const message = await localized("sidebar-tabmemory-private");
+      if (generation === refreshGeneration) {
+        setStatus(message);
+      }
+      return;
+    }
+    search.disabled = false;
 
-  const query = search.value.trim();
-  const records = query ? await TabNotes.search(query) : await TabNotes.list();
-  if (generation !== refreshGeneration) {
-    return;
-  }
+    const query = search.value.trim();
+    const records = query ? await TabNotes.search(query) : await TabNotes.list();
+    if (generation !== refreshGeneration) {
+      return;
+    }
 
-  setStatus(
-    records.length
+    const emptyMessage = records.length
       ? ""
       : await localized(
           query
             ? "sidebar-tabmemory-no-results"
             : "sidebar-tabmemory-empty"
-        )
-  );
-  const labels = {
-    open: await localized("sidebar-tabmemory-open"),
-    edit: await localized("sidebar-tabmemory-edit"),
-    delete: await localized("sidebar-tabmemory-delete"),
-  };
-  if (generation !== refreshGeneration) {
-    return;
-  }
-
-  for (const record of records) {
-    const item = document.createElement("li");
-    item.className = "tabmemory-note";
-
-    const address = document.createElement("div");
-    address.className = "tabmemory-url";
-    address.textContent = record.canonicalUrl;
-
-    const preview = document.createElement("p");
-    preview.textContent = record.text;
-
-    const date = document.createElement("time");
-    date.className = "tabmemory-date";
-    date.dateTime = record.created.toString();
-    date.textContent = new Intl.DateTimeFormat(undefined, {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date(record.created.epochMilliseconds));
-
-    const actions = document.createElement("div");
-    actions.className = "tabmemory-actions";
-    actions.append(
-      makeButton(labels.open, () => {
-        chromeWindow.openTrustedLinkIn(record.canonicalUrl, "tab");
-      }),
-      makeButton(labels.edit, async () => {
-        const input = { value: record.text };
-        const accepted = Services.prompt.prompt(
-          chromeWindow,
-          await localized("sidebar-tabmemory-edit-title"),
-          await localized("sidebar-tabmemory-edit-prompt"),
-          input,
-          null,
-          { value: false }
         );
-        if (!accepted || !input.value.trim()) {
-          return;
-        }
-        await TabNotes.set(
-          makeStoredTab(record.canonicalUrl),
-          input.value.trim()
-        );
-        await refresh();
-      }),
-      makeButton(labels.delete, async () => {
-        if (
-          !Services.prompt.confirm(
+    const labels = {
+      open: await localized("sidebar-tabmemory-open"),
+      edit: await localized("sidebar-tabmemory-edit"),
+      delete: await localized("sidebar-tabmemory-delete"),
+    };
+    if (generation !== refreshGeneration) {
+      return;
+    }
+
+    setStatus(emptyMessage);
+    for (const record of records) {
+      const item = document.createElement("li");
+      item.className = "tabmemory-note";
+
+      const address = document.createElement("div");
+      address.className = "tabmemory-url";
+      address.textContent = record.canonicalUrl;
+
+      const preview = document.createElement("p");
+      preview.textContent = record.text;
+
+      const date = document.createElement("time");
+      date.className = "tabmemory-date";
+      date.dateTime = record.created.toString();
+      date.textContent = new Intl.DateTimeFormat(undefined, {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(new Date(record.created.epochMilliseconds));
+
+      const actions = document.createElement("div");
+      actions.className = "tabmemory-actions";
+      actions.append(
+        makeButton(labels.open, () => {
+          chromeWindow.openTrustedLinkIn(record.canonicalUrl, "tab");
+        }),
+        makeButton(labels.edit, async () => {
+          const input = { value: record.text };
+          const accepted = Services.prompt.prompt(
             chromeWindow,
-            await localized("sidebar-tabmemory-delete-title"),
-            await localized("sidebar-tabmemory-delete-prompt")
-          )
-        ) {
-          return;
-        }
-        await TabNotes.delete(makeStoredTab(record.canonicalUrl));
-        await refresh();
-      })
-    );
+            await localized("sidebar-tabmemory-edit-title"),
+            await localized("sidebar-tabmemory-edit-prompt"),
+            input,
+            null,
+            { value: false }
+          );
+          if (!accepted || !input.value.trim()) {
+            return;
+          }
+          await TabNotes.set(
+            makeStoredTab(record.canonicalUrl),
+            input.value.trim()
+          );
+          await refresh();
+        }),
+        makeButton(labels.delete, async () => {
+          if (
+            !Services.prompt.confirm(
+              chromeWindow,
+              await localized("sidebar-tabmemory-delete-title"),
+              await localized("sidebar-tabmemory-delete-prompt")
+            )
+          ) {
+            return;
+          }
+          await TabNotes.delete(makeStoredTab(record.canonicalUrl));
+          await refresh();
+        })
+      );
 
-    item.append(address, date, preview, actions);
-    notes.append(item);
+      item.append(address, date, preview, actions);
+      notes.append(item);
+    }
+  } catch (error) {
+    console.error("Unable to refresh Tab Memory", error);
+    if (generation === refreshGeneration) {
+      setStatus(await localized("sidebar-tabmemory-error"));
+    }
   }
 }
 
-search.addEventListener("input", () => {
-  refresh().catch(async error => {
-    console.error("Unable to search Tab Memory", error);
-    setStatus(await localized("sidebar-tabmemory-error"));
-  });
-});
-
-refresh().catch(async error => {
-  console.error("Unable to load Tab Memory", error);
-  setStatus(await localized("sidebar-tabmemory-error"));
-});
+search.addEventListener("input", refresh);
+refresh();
