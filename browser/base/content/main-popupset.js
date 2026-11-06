@@ -185,7 +185,7 @@ document.addEventListener(
 
               const choices = results.map(({ tab, memory }) => {
                 const titleText = tab.label || tab.canonicalUrl;
-                const noteText = memory.text.replace(/\\s+/g, " ").slice(0, 80);
+                const noteText = memory.text.replace(/\s+/g, " ").slice(0, 80);
                 return `${titleText} — ${noteText}`;
               });
               const selectedIndex = { value: 0 };
