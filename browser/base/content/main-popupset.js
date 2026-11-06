@@ -183,7 +183,31 @@ document.addEventListener(
                 return;
               }
 
-              const [match] = results;
+              const choices = results.map(({ tab, memory }) => {
+                const titleText = tab.label || tab.canonicalUrl;
+                const noteText = memory.text.replace(/\\s+/g, " ").slice(0, 80);
+                return `${titleText} — ${noteText}`;
+              });
+              const selectedIndex = { value: 0 };
+              const selectPrompt = gBrowser.tabLocalization.formatValueSync(
+                "tab-memory-search-select-prompt"
+              );
+              if (
+                !Services.prompt.select(
+                  window,
+                  title,
+                  selectPrompt,
+                  choices,
+                  selectedIndex
+                )
+              ) {
+                return;
+              }
+
+              const match = results[selectedIndex.value];
+              if (!match) {
+                return;
+              }
               gBrowser.selectedTab = match.tab;
               gBrowser.tabNoteMenu.openPanel(match.tab, {
                 telemetrySource:
