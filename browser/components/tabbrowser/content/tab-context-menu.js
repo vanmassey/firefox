@@ -251,6 +251,7 @@ var TabContextMenu = {
           items: [
             ["#context_bookmarkSelectedTabs", "#context_bookmarkTab"],
             ["#context_addNote", "#context_editNote"],
+            "#context_searchTabMemory",
             "#context_askChatSummarize",
             "#context_createAITab",
             "#context_tabToolsSeparator",
