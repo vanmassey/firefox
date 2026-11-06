@@ -138,14 +138,16 @@ export function createTabMemory({ sessionStore, privateBrowsingUtils }) {
         memory: this.get(tab),
         title: tab?.label || "",
         url: tab?.linkedBrowser?.currentURI?.spec || "",
-      })).filter(({ memory, title, url }) => {
-        if (!memory) {
-          return false;
-        }
-        return [memory.note, title, url].some(value =>
-          value.toLocaleLowerCase().includes(term)
-        );
-      }).map(({ tab, memory }) => ({ tab, memory }));
+      }))
+        .filter(({ memory, title, url }) => {
+          if (!memory) {
+            return false;
+          }
+          return [memory.note, title, url].some(value =>
+            value.toLocaleLowerCase().includes(term)
+          );
+        })
+        .map(({ tab, memory }) => ({ tab, memory }));
     },
   });
 }
