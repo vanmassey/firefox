@@ -91,6 +91,7 @@ var TabContextMenu = {
           items: [
             ["#context_bookmarkSelectedTabs", "#context_bookmarkTab"],
             ["#context_addNote", "#context_editNote"],
+            "#context_searchTabMemory",
             "#context_moveTabOptions",
             { selector: ".share-tab-url-item", optional: true },
             "#context_reopenInContainer",
