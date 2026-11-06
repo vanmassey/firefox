@@ -162,7 +162,7 @@ document.addEventListener(
           const prompt = gBrowser.tabLocalization.formatValueSync(
             "tab-memory-search-prompt"
           );
-          if (!Services.prompt.prompt(window, title, prompt, search, null, {})) {
+          if (!Services.prompt.prompt(window, title, prompt, search, null, { value: false })) {
             break;
           }
 
