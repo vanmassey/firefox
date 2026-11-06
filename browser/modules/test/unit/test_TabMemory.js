@@ -33,7 +33,11 @@ function createTestEnvironment() {
     async search(query) {
       const term = query.toLocaleLowerCase();
       return Array.from(records.values())
-        .filter(record => record.text.toLocaleLowerCase().includes(term));
+        .filter(
+          record =>
+            record.text.toLocaleLowerCase().includes(term) ||
+            record.canonicalUrl.toLocaleLowerCase().includes(term)
+        );
     },
   };
   const privateBrowsingUtils = {
@@ -126,6 +130,14 @@ add_task(async function test_search_matches_native_notes() {
   Assert.equal(
     results[0].memory.text,
     "Review browser engine architecture"
+  );
+
+  const urlResults = await memory.search([researchTab, otherTab], "research");
+  Assert.equal(urlResults.length, 1, "Search also matches a page URL");
+  Assert.equal(
+    urlResults[0].tab,
+    researchTab,
+    "The tab with the matching URL is returned"
   );
 });
 
